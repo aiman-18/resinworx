@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Resinworkx</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #f8f1f5, #fdcef0);
+        }
+        .nav {
+            background-color: #444444;
+            padding: 10px;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+            padding: 10px;
+            display: inline-block;
+        }
+        .nav a:hover {
+            background-color: #faf7f7;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px;
+        }
+        .product {
+            border: 1px solid #080808;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #28a745;
+            color: rgb(255, 220, 220);
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(252, 219, 219);
+            padding: 20px;
+            border: 3px solid #0c0000;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .modal h2 {
+            margin-top: 0;
+        }
+        .close-btn {
+            background-color: rgb(41, 2, 43);
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html">View Cart</a>
+            <a href="login.html">Login</a>
+        </div>
+    </header>
+    
+    <section class="container" id="product-list"></section>
+    
+    <div id="product-modal" class="modal">
+        <h2 id="modal-title"></h2>
+        <p id="modal-price"></p>
+        <button class="btn" id="modal-add-to-cart">Add to Cart</button>
+        <button class="btn" id="modal-buy-now">Buy Now</button>
+        <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+    
+    <audio id="click-sound">
+        <source src="C:\Users\ADMIN\Desktop\FrontenD PROJECT\click.mp3" type="audio/mpeg">
+
+    </audio>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const products = [
+            { name: "Oval earring", price: 150, img: "p1.jpg" },
+            { name: "Hoops ", price: 150 , img: "p2.jpg" },
+            { name: "Photo frame", price: 100, img: "p3.jpg" },
+            { name: "Family Photo frame", price: 500, img: "p4.jpg" },
+            { name: "Photo Keychain", price: 120, img: "p5.jpg" },
+            { name: "Heart Keychain", price: 300, img: "p6.jpg" },
+            { name: "Initial Keychain", price: 140, img: "p7.jpg" },
+            { name: "Date frame", price: 400, img: "p8.jpg" },
+            { name: "Lighting name frame", price: 160, img: "p9.jpg" },
+            { name: "Moon pendent", price: 700, img: "p10.jpg" },
+            { name: "Invitation frame", price: 180, img: "p11.jpg" },
+            { name: "Coaster", price: 600, img: "p12.jpg" },
+            { name: "Car hanging", price: 200, img: "p13.jpg" },
+            
+        ];
+
+        function renderProducts() {
+            const container = document.getElementById("product-list");
+            container.innerHTML = "";
+            products.forEach(product => {
+                const div = document.createElement("div");
+                div.className = "product";
+                div.innerHTML = `
+                    <img src="${product.img}" alt="${product.name}" width="200">
+                    <h2>${product.name}</h2>
+                    <p>Price: $${product.price}</p>
+                `;
+                div.onclick = () => {
+                    playClickSound();
+                    showModal(product);
+                };
+                container.appendChild(div);
+            });
+        }
+
+        function playClickSound() {
+            const sound = document.getElementById("click-sound");
+            sound.currentTime = 0; 
+            sound.play();
+        }
+
+        function showModal(product) {
+            document.getElementById("modal-title").innerText = product.name;
+            document.getElementById("modal-price").innerText = `Price: $${product.price}`;
+            document.getElementById("modal-add-to-cart").onclick = () => addToCart(product.name, product.price);
+            document.getElementById("modal-buy-now").onclick = () => buyNow(product.name, product.price);
+            document.getElementById("product-modal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("product-modal").style.display = "none";
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert(`${name} added to cart!`);
+        }
+
+        function buyNow(name, price) {
+            alert(`Proceeding to checkout for ${name} at $${price}!`);
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>

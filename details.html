@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Product - Business Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .nav {
+            background-color: #333;
+            padding: 10px;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+            padding: 10px;
+            display: inline-block;
+        }
+        .nav a:hover {
+            background-color: #575757;
+        }
+        .container {
+            margin: 20px auto;
+            width: 50%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .product-img {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: 0 auto;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html">View Cart</a>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+        </div>
+    </header>
+    
+    <h2>Product Details</h2>
+    <div class="container">
+        <img id="product-img" class="product-img" src="" alt="Product Image">
+        <h3 id="product-name"></h3>
+        <p id="product-price"></p>
+        <p id="product-description"></p>
+        <button class="btn" onclick="addToCart()">Add to Cart</button>
+        <button class="btn" onclick="buyNow()">Buy Now</button>
+    </div>
+    
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('name');
+        const productPrice = urlParams.get('price');
+        const productImg = urlParams.get('img');
+        const productDescription = urlParams.get('description') || "No description available.";
+
+        document.getElementById("product-name").innerText = productName;
+        document.getElementById("product-price").innerText = "Price: $" + productPrice;
+        document.getElementById("product-img").src = productImg;
+        document.getElementById("product-description").innerText = productDescription;
+
+        function addToCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.push({ name: productName, price: productPrice, img: productImg });
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert(`${productName} added to cart!`);
+        }
+
+        function buyNow() {
+            alert(`Proceeding to checkout for ${productName} at $${productPrice}!`);
+            window.location.href = "checkout.html";
+        }
+    </script>
+</body>
+</html>

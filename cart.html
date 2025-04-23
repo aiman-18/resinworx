@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Resinworx</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(./cartbg.gif);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: initial;
+            background-attachment: fixed;
+        }
+        .nav {
+            background-color: #333;
+            padding: 10px;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+            padding: 10px;
+            display: inline-block;
+        }
+        .nav a:hover {
+            background-color: #575757;
+        }
+        .container {
+            margin: 20px auto;
+            width: 80%;
+        }
+        .cart-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #c82333;
+        }
+        .checkout-btn {
+            background-color: #28a745;
+        }
+        .checkout-btn:hover {
+            background-color: #218838;
+        }
+        mark{
+            background-color: pink;
+        }
+    
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav">
+            <a href="index.html">Home</a>
+            <a href="product.html">Products</a>
+            <a href="cart.html">View Cart</a>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+        </div>
+    </header>
+    
+    
+    <h1><mark>Your Cart</mark></h1>
+    <div class="container" id="cart-container"></div>
+    <h3>Total: $<span id="total-price">0</span></h3>
+    <button class="btn checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+    <button class="btn" onclick="clearCart()">Clear Cart</button>
+    
+    <script>
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let cartContainer = document.getElementById("cart-container");
+        let totalPriceElement = document.getElementById("total-price");
+        
+        function displayCart() {
+            cartContainer.innerHTML = "";
+            let total = 0;
+            cart.forEach((item, index) => {
+                let cartItem = document.createElement("div");
+                cartItem.className = "cart-item";
+                cartItem.innerHTML = `
+                    <span>${item.name} - $${item.price}</span>
+                    <button class="btn" onclick="removeItem(${index})">Remove</button>
+                `;
+                cartContainer.appendChild(cartItem);
+                total += item.price;
+            });
+            totalPriceElement.textContent = total;
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            displayCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            localStorage.setItem("cart", JSON.stringify(cart));
+            displayCart();
+        }
+
+        function checkout() {
+            if (cart.length > 0) {
+                alert("Proceeding to checkout...");
+                localStorage.removeItem("cart");
+                window.location.href = "checkout.html";
+            } else {
+                alert("Your cart is empty!");
+            }
+        }
+        
+        displayCart();
+    </script>
+    <footer ><marquee behavior="" scrollamount="50" direction="right"> <img src="./giphy.gif" alt="" height="auto" width="150px"> </marquee></footer>
+</body>
+</html>
